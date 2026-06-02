@@ -19,8 +19,56 @@
   <link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700&family=Noto+Serif+KR:wght@300;400&display=swap" rel="stylesheet" media="print" onload="this.media='all'"/>
   <noscript><link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700&family=Noto+Serif+KR:wght@300;400&display=swap" rel="stylesheet"/></noscript>
   <script defer src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.2/kakao.min.js" integrity="sha384-TiCUE00h649CAMonG018J2ujOgDKW/kVWlChEuu4jK2vxfAAD0eZxzCKakxg55G4" crossorigin="anonymous"></script>
-  <script type="module" crossorigin src="/assets/index-c7a2db9e-v2.js"></script>
+  <script type="module" crossorigin src="/assets/index-c7a2db9e-v3.js"></script>
   <link rel="stylesheet" crossorigin href="/assets/index-4fe50218-v2.css">
+  <script type="text/javascript" src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpKeyId=naht0vyduw"></script>
+  <script>
+    (function () {
+      var LAT = 37.4920415, LNG = 126.9242281;
+
+      function initNaverMap() {
+        var container = document.getElementById('naver-map');
+        if (!container || container.__naverMapReady) return;
+        container.__naverMapReady = true;
+
+        var map = new naver.maps.Map(container, {
+          center: new naver.maps.LatLng(LAT, LNG),
+          zoom: 17,
+          mapTypeControl: false,
+          scaleControl: false,
+          logoControl: true,
+          mapDataControl: false,
+          zoomControl: false,
+          tileSpare: 2
+        });
+
+        new naver.maps.Marker({
+          position: new naver.maps.LatLng(LAT, LNG),
+          map: map,
+          title: '더에스비웨딩컨벤션'
+        });
+      }
+
+      // React 렌더링 후 #naver-map 이 DOM에 추가되는 시점 감지
+      var observer = new MutationObserver(function () {
+        if (document.getElementById('naver-map')) {
+          observer.disconnect();
+          initNaverMap();
+        }
+      });
+
+      function start() {
+        initNaverMap();
+        observer.observe(document.body, { childList: true, subtree: true });
+      }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', start);
+      } else {
+        start();
+      }
+    })();
+  </script>
   <style>body{opacity:0}</style>
   <script>
     document.fonts.ready.then(function(){
