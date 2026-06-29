@@ -69,13 +69,45 @@
       }
     })();
   </script>
-  <style>body{opacity:0}</style>
+  <style>
+    body{opacity:0}
+    /* 이미지 저장 방지 */
+    img {
+      -webkit-touch-callout: none; /* iOS 길게 누르기 메뉴 차단 */
+      -webkit-user-drag: none;     /* 드래그 저장 차단 */
+    }
+    /* 커버·갤러리 썸네일: 클릭은 부모 div에서 처리하므로 img 직접 이벤트 차단 */
+    #scene_photo, .photo_cell img {
+      pointer-events: none;
+    }
+  </style>
   <script>
     document.fonts.ready.then(function(){
       document.body.style.opacity='1';
       document.body.style.transition='opacity 0.2s ease';
     });
     setTimeout(function(){ document.body.style.opacity='1'; }, 800);
+  </script>
+  <script>
+    // 이미지 다운로드 방지
+    (function () {
+      // PC 우클릭 → "다른 이름으로 저장" 차단
+      document.addEventListener('contextmenu', function (e) {
+        if (e.target.tagName === 'IMG') e.preventDefault();
+      });
+      // PC 드래그 → 바탕화면 저장 차단
+      document.addEventListener('dragstart', function (e) {
+        if (e.target.tagName === 'IMG') e.preventDefault();
+      });
+      // Android 길게 누르기 저장 차단
+      document.addEventListener('touchstart', function (e) {
+        if (e.target.tagName === 'IMG') {
+          e.target.addEventListener('touchend', function handler() {
+            e.target.removeEventListener('touchend', handler);
+          });
+        }
+      }, { passive: true });
+    })();
   </script>
 </head>
 <body>
